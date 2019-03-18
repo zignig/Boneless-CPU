@@ -1,4 +1,4 @@
-.include inc.asm
+.include asm/inc.asm
 
 .def CTR, R5
 .def MAX, R1 

@@ -104,6 +104,13 @@ abort:
     JR W,0
 .endm
 
+(DOCOL):
+    NOP
+    NOP
+
+.macro DOCOL
+    .@ (DOCOL)
+.endm
 ; EXECUTE FORTH WORD
 HEADER EXECUTE
     pop
@@ -118,7 +125,7 @@ HEADER EXIT
 NEXT
 
 HEADER MAIN
-    ENTER
+    DOCOL
     .@ xt_ok
     EXIT
 NEXT

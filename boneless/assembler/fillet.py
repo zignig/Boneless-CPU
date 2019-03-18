@@ -8,7 +8,7 @@ from boneless.arch.disasm import disassemble
 end = False
 exit = False
 strin = ""
-debug = True
+debug = True 
 
 
 def io(addr, data=None):
