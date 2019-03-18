@@ -25,14 +25,14 @@ HEADER DROP
 NEXT
 
 HEADER sub
-    DOCOL
+    ENTER
     set_20
     DROP
     EXIT
 NEXT
 
 HEADER gorf
-    DOCOL
+    ENTER
     set_10
     set_10
     set_10
@@ -75,5 +75,4 @@ HEADER SWAP
     XCHG W,TOS
     push
 NEXT
-
 

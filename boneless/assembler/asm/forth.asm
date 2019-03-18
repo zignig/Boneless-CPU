@@ -83,50 +83,51 @@ abort:
 
 ; --8<--  SNIP
 
+; REF  http://www.figuk.plus.com/build/heart.htm
+; NEEDED words NEXT , ENTER , EXECUTE , EXIT
+; NEXT and ENTER are code fragments , use macros 
+; EXECUTE and EXIT are forth words in assembly
+
+; NEXT FRAGMENT
+; [ip] to W IP++  [W] jump
 .macro NEXT
-    ADDI IP,1   ; jump to the next xt in the list
-    MOV W,IP    ; copy the IP into the working register
-    LD W,W,0    ; load the data at the address in W
-    JR W,0     ; jump to the data reference 
+    LD W,IP,0
+    ADDI IP,1
+    JR W,0
 .endm
 
-.macro ENTER, h 
-    MOVA W, $h ; store this spot in the working register 
-    MOV IP, W   ; copy into the interpter pointer
-    LD W,W,0    ; load the value of the working pointer 
-    JR W,0      ; jump to the XT
-    .label $h   ; that's right here
-.endm
-
-.macro DOCOL
-    push
+; ENTER FRAGMENT
+.macro ENTER
     MOV W,IP
     rpush
-    pop
-    ADDI W, 13
-    MOV IP,W
     LD W,W,0
     JR W,0
 .endm
 
-; no next on this one
+; EXECUTE FORTH WORD
+HEADER EXECUTE
+    pop
+    LD W,W,0
+    JR W,0
+NEXT
+
+; EXIT FORTH WORD
 HEADER EXIT
     rpop
     MOV IP,W
+NEXT
 
-; MAIN LOOP
-init:
-    ENTER start ; start the inner intepreter
+HEADER MAIN
+    ENTER
     .@ xt_ok
-;    .@ xt_test
-    .@ xt_gorf
-    .@ xt_EXIT
-J init
+    EXIT
+NEXT
 
-.macro EXECUTE name
-    MOVA W, $name
-    rpush
-.endm
+init:
+    MOVA W, xt_MAIN
+    push
+    EXECUTE
+J init
 
 HEADER ok ; output ok
     MOVL W,111
@@ -139,15 +140,24 @@ HEADER halt  ; send halt up to the simulator
     STX SP,SP,1
 NEXT
 
-HEADER ?key
-    NOP
-again:
-    LDX W,SP,0
-    CMP W,SP
-    JZ out
-    STX W,SP,0
-    J again
-out:
-    HALT
+;HEADER ?key
+;    NOP
+;again:
+;    LDX W,SP,0
+;    CMP W,SP
+;    JZ out
+;    STX W,SP,0
+;    J again
+;out:
+;    HALT
+;NEXT
+
+; Add all the prospective includes in
+; .include asm/basic.asm
+; .include asm/compiler.asm
+; .include asm/intepreter.asm
+; .include asm/other.asm
+
+HEADER HERE
+    .pos latest
 NEXT
-.include asm/basic.asm
