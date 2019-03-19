@@ -35,7 +35,7 @@ abort:
     JAL RTN, $name
 .endm
 
-.macro RET
+.macro _ret 
     JR RTN, 0
 .endm
 
@@ -68,14 +68,17 @@ abort:
 
 ; start of low level forth words
 
-.equ latest, r_R0 
-
-.macro HEADER, name
+.equ latest, r_R0 ; start latest at the bottom of the cookie jat.
+;
+.macro HEADER, name     ; this makes a full header
+; this is all python macros found in commands.py
     .plabel $name, d ; push a header label
     .pos latest         ; add current pos to code
     .pset latest, $name, d  ; copy this ref for next header
     .ulstring $name     ; unlabeled string length then characters
     .plabel $name , xt  ; the execution token , direct pointer
+; this is a trick , registers the actual name as a marcro
+; so you can write assembly in forth
     .mlabel $name ; make a direct execution macro , used later
 .endm
 
@@ -98,23 +101,29 @@ abort:
 
 ; ENTER FRAGMENT
 .macro ENTER
-    MOV W,IP
-    rpush
-    LD W,W,0
-    JR W,0
+    MOV W,IP    ; move the existing instruction pointer into working
+    rpush       ; save where we are
+    LD W,W,0    ; resolve the current instruction
+    ADDI W,1    ; move to the next one  
+    LD IP,W,0   ; save it for exit
+    NEXT        ; and go;       
 .endm
 
 (DOCOL):
-    NOP
-    NOP
+    push
+    MOV W,IP
+    rpush
+    pop
+    NEXT
 
 .macro DOCOL
     .@ (DOCOL)
 .endm
+
 ; EXECUTE FORTH WORD
 HEADER EXECUTE
-    pop
-    LD W,W,0
+    pop 
+    LD IP,W,0
     JR W,0
 NEXT
 
@@ -122,18 +131,22 @@ NEXT
 HEADER EXIT
     rpop
     MOV IP,W
+    NEXT
 NEXT
 
 HEADER MAIN
-    DOCOL
-    .@ xt_ok
-    EXIT
+    loop:
+        .@  xt_ok
+        .@  xt_ok
+        .@  xt_ok
+        .@  xt_ok
+    .@ loop
 NEXT
 
 init:
-    MOVA W, xt_MAIN
-    push
-    EXECUTE
+    MOVA IP, xt_MAIN ; load the pointer for MAIN
+    LD W,IP,0      ; put it into the instruction pointer
+    JR W,0      ; go there 
 J init
 
 HEADER ok ; output ok
