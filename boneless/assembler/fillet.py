@@ -8,7 +8,7 @@ from boneless.arch.disasm import disassemble
 end = False
 exit = False
 strin = ""
-debug = True 
+debug = True
 
 
 def io(addr, data=None):
@@ -39,7 +39,7 @@ def io(addr, data=None):
 #        elif addr == 4:
 #            print("spin")
 
-cpu = BonelessSimulator(start_pc=0,mem_size=1024)
+cpu = BonelessSimulator(start_pc=0, mem_size=1024)
 if len(sys.argv) > 1:
     file_name = sys.argv[1]
 else:
@@ -52,13 +52,12 @@ cpu.register_io(io)
 
 
 def get_line():
-    global strin,debug
+    global strin, debug
     strin = input(">")
     if strin.startswith("\\"):
-        if strin[1:] == 'd':
-            debug= not debug
+        if strin[1:] == "d":
+            debug = not debug
         strin = ""
-
 
 
 def line(asmblr):
@@ -75,7 +74,7 @@ def line(asmblr):
         label = asmblr.rev_labels[cpu.pc]
     else:
         label = ""
-    print(pc, "|", code, "|", reg, "|", stack,"|",rstack, "->", label,"|",ref)
+    print(pc, "|", code, "|", reg, "|", stack, "|", rstack, "->", label, "|", ref)
 
 
 while not end:

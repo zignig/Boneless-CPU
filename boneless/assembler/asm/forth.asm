@@ -4,7 +4,7 @@
 ; 20190319
 
 .alloc stack, 8 ; .alloc will label and zero X cells;
-.alloc rstack, 8
+.alloc rstack, 8 ; the return stack
 
 ; redefine the registers
 
@@ -19,14 +19,15 @@
 
 ; macro to send an external halt to the simulator
 .macro HALT 
-    STX SP,SP,1
+    STX SP,SP,1         ; SP is zero , write a word to address 1 , causes the simulator to stop
 .endm
 
+; reset the stack and return pointers
 reset:
     MOVL PSP,15 
     MOVL RSP,23
     J init
-
+; empty abort
 abort:
     J init
 
@@ -114,7 +115,7 @@ abort:
     MOV W,IP
     rpush
     pop
-    NEXT
+NEXT
 
 .macro DOCOL
     .@ (DOCOL)
