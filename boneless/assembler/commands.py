@@ -30,8 +30,7 @@ def section(l):
 
 @register(".int", 1)
 def pos(l):
-    v = assembler.variables[l.params[0]]
-    assembler.current_section.add_code([int(v)])
+    assembler.current_section.add_code([int(l.params[0])])
 
 
 @register(".ulstring", 1)
@@ -103,13 +102,14 @@ def get_pos(l):
     v = assembler.variables[l.params[0]]
     assembler.current_section.add_code([resolver(v)])
 
-" put the absolute address"
 @register(".@",1)
 def put_at(l):
+    " put the absolute address"
     assembler.current_section.add_code([resolver(l.params[0])])
 
 @register(".set", 2)
 def set_pos(l):
+    " set a named variable to a value"
     assembler.variables[l.params[0]] = l.params[1]
 
 
