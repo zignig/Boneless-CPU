@@ -26,7 +26,7 @@ class _MemoryPort(Elaboratable):
         return Fragment()
 
 
-class _ExternalPort(Elaboratable):
+class _ExternalPort():
     def __init__(self):
         self.addr   = Signal(16, name="ext_addr")
         self.r_en   = Signal(1,  name="ext_r_en")

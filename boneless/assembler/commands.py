@@ -82,7 +82,7 @@ def stringer(l):
 @register(".equ", 2)
 def equ(l):
     name = l.params[0]
-    val = l.params[1]
+    val = literal_eval(l.params[1])
     assembler.variables[name] = val
 
 

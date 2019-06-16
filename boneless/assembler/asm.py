@@ -222,7 +222,7 @@ class Assembler:
                     print(pval)
                 self.current_section.add_code(comm(**pval))
             else:
-                self.info()
+                #self.info()
                 raise UnknownInstruction(i)
 
     def packer(self):
