@@ -18,23 +18,31 @@ class TokenLine:
     def __init__(self, source, line, val):
         self.source = source
         self.line = line
-        self.val = val
+        self.val = val.strip()
         self.comment = False
-        if val.startswith(";"):
+        #if len(self.val) == 0:
+        #    # empty line 
+        #    self.comment = True
+        #    return
+        if self.val.startswith(";"):
             self.comment = True
             return
-        comment_pos = val.find(";")
+        comment_pos = self.val.find(";")
         if comment_pos != -1:
-            val = val[:comment_pos]
-            print(val)
+            self.val = self.val[:comment_pos-1]
+            if comment_pos == 1:
+                self.comment = True
+                return
+            print('comment {}'.format(val))
         # self.items = val.split()
-        part = val.strip().partition(" ")
+        part = self.val.strip().partition(" ")
         self.command = part[0]
         self.params = []  # comma seperated values
         p = part[2].split(",")
         for i in p:
             if i != "":
                 self.params.append(i.strip())
+        print(self)
 
     def copy(self, postfix):
         c = TokenLine(self.source + "-" + postfix, self.line, "")
