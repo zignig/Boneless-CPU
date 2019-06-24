@@ -20,10 +20,6 @@ class TokenLine:
         self.line = line
         self.val = val.strip()
         self.comment = False
-        #if len(self.val) == 0:
-        #    # empty line 
-        #    self.comment = True
-        #    return
         if self.val.startswith(";"):
             self.comment = True
             return
@@ -51,6 +47,10 @@ class TokenLine:
         return c
 
     def __repr__(self):
+        if self.comment:
+            comment = ''
+        else:
+            comment = self.comment
         return (
             "<"
             + self.source
@@ -60,6 +60,8 @@ class TokenLine:
             + str(self.command)
             + "|"
             + str(self.params)
+            + "|"
+            + str(comment)
             + ">"
         )
 
