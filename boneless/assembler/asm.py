@@ -82,14 +82,9 @@ class Assembler:
 
         # put the code into place
         if data != "":
-            li = data.splitlines()
-            tokl = []
-            for i, j in enumerate(li):
-                if len(j) > 1:
-                    tokl.append(TokenLine("string", i, j))
-            self.token_lines = tokl
+            self.load_fragment(data)
         elif file_name != "":
-            self.token_lines = self.load_file(file_name)
+            self.token_lines += self.load_file(file_name)
 
         # ref to the linker
         self.linker = Linker(self)
@@ -98,6 +93,14 @@ class Assembler:
         if name not in self.sections:
             self.sections[name] = CodeSection(name)
         self.current_section = self.sections[name]
+
+    def load_fragment(self,data):
+        li = data.splitlines()
+        tokl = []
+        for i, j in enumerate(li):
+            if len(j) > 1:
+                tokl.append(TokenLine("string", i, j))
+        self.prepend(tokl)
 
     def load_file(self, file_name):
         f = open(file_name)
