@@ -130,7 +130,7 @@ class Assembler:
                 print("reference :" + symbol)
             print(self.current_section.labels)
             if symbol[1:] in self.current_section.labels:
-                val = -self.current_section.labels[symbol[1:]]
+                val = self.current_section.labels[symbol[1:]]
         # symbols
         elif symbol in self.variables:
             if self.debug:
