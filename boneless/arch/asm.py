@@ -73,9 +73,11 @@ class Assembler:
                                            loc=(index,), lines=True) from None
             if m["direct"]:
                 if m["direct"] in self.directives:
-                    val = self.directives[m['direct']](m)
+                    cls = self.directives[m['direct']]
+                    print(cls)
+                    val = cls(m)
                     if val != None:
-                        line_output.append(val)
+                        line_output.append(val.run())
                 else:
                     raise TranslationError(f"Unknown directive {m['direct']} at {{loc}}",
                                            loc=(index,), lines=True)
