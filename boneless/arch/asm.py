@@ -41,6 +41,7 @@ class Assembler:
         self.constants = {}
         self.label_locs  = {}
         self.label_addrs = {}
+        self.const_locs= {}
 
     def parse(self,input):
         if isinstance(input,str):
@@ -113,6 +114,12 @@ class Assembler:
     def assemble(self):
         instr_sizes = {}
         fwd_adjust  = 0
+        # clear the internal maps 
+
+        self.constants = {}
+        self.label_locs  = {}
+        self.label_addrs = {}
+        self.const_locs= {}
 
         def resolve(obj_addr, symbol):
             # If the label isn't defined it could mean one of the two things:
@@ -154,9 +161,9 @@ class Assembler:
                     if elem.name in self.constants:
                         raise TranslationError(f"Const {repr(elem.name)} at {{new}} has the same name "
                                                f"as the const at {{old}}",
-                                               new=indexes, old=str(const_locs[elem.name]))
+                                               new=indexes, old=str(self.const_locs[elem.name]))
 
-                        label_locs[elem.name] = indexes
+                    self.const_locs[elem.name] = indexes
                 self.constants[elem.name] = elem.value
             elif isinstance(elem, mc.Label):
                 if n_pass == 1:
