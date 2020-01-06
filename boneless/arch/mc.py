@@ -5,7 +5,7 @@ from parse import parse
 from string import Formatter
 
 
-__all__ = ["UnresolvedRef","Constant",  "Label", "Macro" ,"Operand", "Instr"]
+__all__ = ["UnresolvedRef","Constant",  "Label", "Macro" ,"Operand", "Instr","AbsRef"]
 
 
 class UnresolvedRef(Exception):
@@ -24,6 +24,18 @@ class Constant:
 
     def __eq__(self, other):
         return isinstance(other, Constant) and self.name == other.name
+
+class AbsRef:
+    __slots__ = ["name"]
+    
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return f"AbsRef({repr(self.name)})"
+
+    def __eq__(self, other):
+        return isinstance(other, AbsRef) and self.name == other.name
 
 class Label:
     __slots__ = ["name"]

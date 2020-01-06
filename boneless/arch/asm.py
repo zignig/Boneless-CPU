@@ -156,6 +156,9 @@ class Assembler:
             elif isinstance(elem, mc.Macro):
                 # TODO process macro and return
                 pass
+            elif isinstance(elem,mc.AbsRef):
+                output.append(elem) 
+
             elif isinstance(elem, mc.Constant):
                 if n_pass == 1:
                     if elem.name in self.constants:
@@ -238,6 +241,12 @@ class Assembler:
             if output == old_output:
                 break
 
+        # Resolve absolute references 
+        print(self.label_addrs)
+        for i in output:
+            print(i)
+            if isinstance(i,mc.AbsRef):
+                print("find ref")
         # If there are unresolved relocations, ensure they are either reported as an error or emitted
         # as the longest possible encoding, for future linking.
         if None in output:
