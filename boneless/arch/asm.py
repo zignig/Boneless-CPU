@@ -242,11 +242,11 @@ class Assembler:
                 break
 
         # Resolve absolute references 
-        print(self.label_addrs)
-        for i in output:
-            print(i)
-            if isinstance(i,mc.AbsRef):
-                print("find ref")
+        for i,j in enumerate(output):
+            if isinstance(j,mc.AbsRef):
+                if j.name in self.label_addrs:
+                    output[i] = self.label_addrs[j.name]
+
         # If there are unresolved relocations, ensure they are either reported as an error or emitted
         # as the longest possible encoding, for future linking.
         if None in output:
