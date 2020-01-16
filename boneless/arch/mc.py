@@ -37,6 +37,19 @@ class AbsRef:
     def __eq__(self, other):
         return isinstance(other, AbsRef) and self.name == other.name
 
+
+class RelRef:
+    __slots__ = ["name"]
+    
+    def __init__(self, name):
+        self.name = name
+
+    def __repr__(self):
+        return f"RelRef({repr(self.name)})"
+
+    def __eq__(self, other):
+        return isinstance(other, RelRef) and self.name == other.name
+
 class Label:
     __slots__ = ["name"]
 

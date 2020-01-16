@@ -159,6 +159,9 @@ class Assembler:
             elif isinstance(elem,mc.AbsRef):
                 output.append(elem) 
 
+            elif isinstance(elem,mc.RelRef):
+                output.append(elem) 
+
             elif isinstance(elem, mc.Constant):
                 if n_pass == 1:
                     if elem.name in self.constants:
@@ -243,10 +246,13 @@ class Assembler:
 
         # Resolve absolute references 
         for i,j in enumerate(output):
+            if isinstance(j,mc.RelRef):
+                output[i] = self.label_addrs[j.name]-i
             if isinstance(j,mc.AbsRef):
                 if j.name in self.label_addrs:
                     output[i] = self.label_addrs[j.name]
 
+        
         # If there are unresolved relocations, ensure they are either reported as an error or emitted
         # as the longest possible encoding, for future linking.
         if None in output:
