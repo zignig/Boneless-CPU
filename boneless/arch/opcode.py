@@ -1,12 +1,12 @@
 from collections import defaultdict
 
-from .mc import Label,AbsRef,RelRef
+from .mc import Label,AbsRef,RelRef,Constant
 from .instr import Instr, Reg
 
 
 __all__ = [
     # Directives
-    "L","AR","RR",
+    "L","AR","RR","C",
     # Registers
     "R0",   "R1",   "R2",   "R3",   "R4",   "R5",   "R6",   "R7",
     # Instructions
@@ -107,6 +107,7 @@ class C_EXT  (Instr): coding = "110-------------"
 L = Label
 AR = AbsRef
 RR = RelRef
+C = Constant
 
 # Registers
 R0, R1, R2, R3, R4, R5, R6, R7 = map(Reg, range(8))
